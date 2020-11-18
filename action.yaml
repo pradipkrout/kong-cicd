@@ -1,0 +1,21 @@
+name: 'decK action'
+description: 'Declarative Configuration management for Kong'
+inputs:
+  command:
+    description: 'A decK command you want to execute'
+    required: true
+    default: 'ping'
+  kong_workspaces:
+    description: 'Kong workspaces where yaml files are located'
+    required: true
+    default: 'kong'
+  options:
+    description: 'Option parameters for a decK command'
+    required: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.command }}
+    - ${{ inputs.kong_workspaces }}
+    - ${{ inputs.options }}

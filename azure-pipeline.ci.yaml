@@ -1,0 +1,27 @@
+trigger: none
+
+resources:
+    repo: self
+    
+jobs:
+- job: Deck_Config
+  displayName: Deck configurations for Kong
+  variables:
+  pool:
+    name: Linux Build
+  steps:
+    - task: ./
+      displayName: Deck Ping
+      inputs:
+        command: "ping"
+        options: "--kong-addr ${{ secrets.KONG_ADDR }}"
+    - task: ./
+      displayName: Deck validate
+      inputs:
+        command: "validate"
+        options: "--kong-addr ${{ secrets.KONG_ADDR }}"
+    - task: ./
+      displayName: Deck Diff
+      inputs:
+        command: "diff"
+        options: "--kong-addr ${{ secrets.KONG_ADDR }}"
