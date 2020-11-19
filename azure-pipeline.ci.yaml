@@ -6,7 +6,7 @@ resources:
 
 stages:
 - stage: Deck_Ping
-  displayName: Deck configurations for Kong
+  displayName: Deck Ping for Kong
   jobs:
   - template: /action.yaml
     parameters:
@@ -14,7 +14,7 @@ stages:
       options: --kong-addr http://localhost:8001
       
 - stage: Deck_Validate
-  displayName: Deck configurations for Kong
+  displayName: Deck Validate for Kong
   jobs:
   - template: /action.yaml
     parameters:
@@ -23,7 +23,7 @@ stages:
       kong_workspaces: kong
       
 - stage: Deck_Diff
-  displayName: Deck configurations for Kong
+  displayName: Deck Diff for Kong
   jobs:
   - template: /action.yaml
     parameters:
