@@ -1,4 +1,6 @@
-trigger: none
+trigger: 
+    pr:
+      - master
 
 resources:
     repo: self
@@ -14,14 +16,14 @@ jobs:
       displayName: Deck Ping
       inputs:
         command: "ping"
-        options: "--kong-addr ${{ secrets.KONG_ADDR }}"
+        options: "--kong-addr http://localhost:8001"
     - task: ./
       displayName: Deck validate
       inputs:
         command: "validate"
-        options: "--kong-addr ${{ secrets.KONG_ADDR }}"
+        options: "--kong-addr http://localhost:8001"
     - task: ./
       displayName: Deck Diff
       inputs:
         command: "diff"
-        options: "--kong-addr ${{ secrets.KONG_ADDR }}"
+        options: "--kong-addr http://localhost:8001"
