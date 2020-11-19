@@ -1,9 +1,8 @@
-trigger: 
-    pr:
-      - master
+pr:
+- master
 
 resources:
-    repo: self
+  repo: self
     
 jobs:
 - job: Deck_Config
