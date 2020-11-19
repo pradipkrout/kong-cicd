@@ -2,12 +2,11 @@ pr:
 - master
 
 resources:
-  repo: self
+- repo: self
     
 jobs:
 - job: Deck_Config
   displayName: Deck configurations for Kong
-  variables:
   pool:
     name: Linux Build
   steps:
