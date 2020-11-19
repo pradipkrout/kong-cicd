@@ -1,21 +1,36 @@
-name: 'decK action'
-description: 'Declarative Configuration management for Kong'
-inputs:
-  command:
-    description: 'A decK command you want to execute'
-    required: true
-    default: 'ping'
-  kong_workspaces:
-    description: 'Kong workspaces where yaml files are located'
-    required: true
-    default: 'kong'
-  options:
-    description: 'Option parameters for a decK command'
-    required: false
-runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.command }}
-    - ${{ inputs.kong_workspaces }}
-    - ${{ inputs.options }}
+parameters:
+- name: command
+  type: string
+  default: ping
+- name: kong_workspaces
+  type: string
+  default: kong
+- name: options
+  type: string
+  
+jobs:
+- job: deckAction
+  displayName: Deck Action
+  steps:
+  - task: Docker@2
+    displayName: Build
+    inputs:
+      command: build
+      containerRegistry: APD Registry
+      repository: kong-deck
+      dockerFile: dockerfile
+      tags: latest
+      arguments: 
+      
+  - task: Docker@2
+    displayName: Push
+    inputs:
+      command: push
+      containerRegistry: APD Registry
+      repository: kong-deck
+      tags: latest
+  
+  - task: Docker@2
+    displayName: Docker Run deck
+  - script: |
+      docker run registry.dev.apdcomms.co.uk:443/kong-deck:latest 

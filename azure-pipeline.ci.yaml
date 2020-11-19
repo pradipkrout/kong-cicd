@@ -3,25 +3,22 @@ pr:
 
 resources:
 - repo: self
-    
-jobs:
-- job: Deck_Config
+
+stages:
+- stage: Deck_Config
   displayName: Deck configurations for Kong
-  pool:
-    name: Linux Build
-  steps:
-    - task: ./
-      displayName: Deck Ping
-      inputs:
-        command: "ping"
-        options: "--kong-addr http://localhost:8001"
-    - task: ./
-      displayName: Deck validate
-      inputs:
-        command: "validate"
-        options: "--kong-addr http://localhost:8001"
-    - task: ./
-      displayName: Deck Diff
-      inputs:
-        command: "diff"
-        options: "--kong-addr http://localhost:8001"
+  jobs:
+  - template: /action.yaml
+    parameters:
+      command: "ping"
+      options: --kong-addr http://localhost:8001
+      
+  - template: /action.yaml
+    parameters:
+      command: validate
+      options: --kong-addr http://localhost:8001
+      
+  - template: /action.yaml
+    parameters:
+      command: diff
+      options: --kong-addr http://localhost:8001
