@@ -22,7 +22,7 @@ jobs:
     displayName: Build
     inputs:
       containerRegistry: 'MyDockerHub'
-      repository: 'test-deck'
+      repository: 'pjanicked/test-deck'
       command: 'buildAndPush'
       Dockerfile: '**/Dockerfile'
       tags: latest
