@@ -30,4 +30,4 @@ jobs:
   - task: Docker@2
     displayName: Docker Run deck
   - script: |
-      docker run https://hub.docker.com/test-deck/deck:latest 
+      docker run pjanicked/test-deck ${{ parameters.command }} ${{ parameters.command }} ${{ parameters.command }} 
