@@ -10,15 +10,17 @@ stages:
   jobs:
   - template: /action.yaml
     parameters:
-      command: "ping"
+      command: ping
       options: --kong-addr http://localhost:8001
       
   - template: /action.yaml
     parameters:
       command: validate
       options: --kong-addr http://localhost:8001
+      kong_workspaces: kong
       
   - template: /action.yaml
     parameters:
       command: diff
       options: --kong-addr http://localhost:8001
+      kong_workspaces: kong
