@@ -1,5 +1,27 @@
 #!/bin/sh -l
+set -e -o pipefail
 echo Hello World
-echo Your container args are: "$1"
-echo Your container args are: "$2"
-echo Your container args are: "$3"
+
+main (){
+    echo Inside Main
+    cmd=$1
+    dir=$2
+    ops=$3
+	opsvalue=$4
+    if [ ! -e ${dir} ]; then
+        echo "${dir}: No such file or directoy exists";
+        exit 1;
+    fi
+
+    for file in $(ls ${dir}); do
+        echo "Executing: deck $cmd $ops -s $dir/$file"
+        deck $cmd $ops $opsvalue -s $dir/$file
+    done
+}
+
+
+case $1 in
+    "ping") deck $1 $3;;
+    "validate"|"diff"|"sync") main $1 $2 "$3" ;;
+    * ) echo "deck $1 is not supported." && exit 1 ;;
+esac
