@@ -6,7 +6,6 @@ main (){
     dir=$2
     ops=$3
 	opsvalue=$4
-	echo Dir $(ls)
     if [ ! -e ${dir} ]; then
         echo "${dir}: No such file or directoy exists";
         exit 1;

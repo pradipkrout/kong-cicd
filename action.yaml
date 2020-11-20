@@ -10,17 +10,8 @@ parameters:
   
 jobs:
 - job: deckAction
-  displayName: Deck Actions
+  displayName: Run Deck Actions
   steps:  
-  - task: Docker@2
-    displayName: Build and Push docker image
-    inputs:
-      containerRegistry: 'MyDockerHub'
-      repository: 'pjanicked/test-deck'
-      command: 'buildAndPush'
-      Dockerfile: '**/Dockerfile'
-      tags: latest
-  
   - task: Docker@2
     displayName: Docker Run deck
   - script: |
