@@ -11,7 +11,7 @@ stages:
   - template: /action.yaml
     parameters:
       command: ping
-      options: kong-addr http://localhost:8001
+      options: --kong-addr http://localhost:8001
       
 - stage: Deck_Validate
   displayName: Deck Validate for Kong
@@ -19,7 +19,7 @@ stages:
   - template: /action.yaml
     parameters:
       command: validate
-      options: kong-addr http://localhost:8001
+      options: --kong-addr http://localhost:8001
       kong_workspaces: kong
       
 - stage: Deck_Diff
@@ -28,5 +28,5 @@ stages:
   - template: /action.yaml
     parameters:
       command: diff
-      options: kong-addr http://localhost:8001
+      options: --kong-addr http://localhost:8001
       kong_workspaces: kong
