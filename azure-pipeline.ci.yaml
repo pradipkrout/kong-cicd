@@ -11,7 +11,7 @@ stages:
   - template: /action.yaml
     parameters:
       command: ping
-      options: "--kong-addr http://localhost:8001"
+      options: --kong-addr http://localhost:8001
       
 - stage: Deck_Validate
   displayName: Deck Validate for Kong
