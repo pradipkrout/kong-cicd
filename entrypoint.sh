@@ -15,7 +15,7 @@ main (){
 
     for file in $(ls ${dir}); do
         echo "Executing: deck $cmd $ops -s $dir/$file"
-        deck $cmd $ops $opsvalue -s $dir/$file
+        deck $cmd --$ops $opsvalue -s $dir/$file
     done
 }
 
