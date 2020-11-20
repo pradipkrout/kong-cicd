@@ -1,4 +1,4 @@
-pr:
+trigger:
 - master
 
 resources:
@@ -37,11 +37,11 @@ stages:
       options: kong-addr https://heroku-kong-pjanicked.herokuapp.com/kong-admin
       kong_workspaces: kong
       
-- stage: Deck_Diff
-  displayName: Deck Diff for Kong
+- stage: Deck_Sync
+  displayName: Deck Sync for Kong
   jobs:
   - template: /action.yaml
     parameters:
-      command: diff
+      command: sync
       options: kong-addr https://heroku-kong-pjanicked.herokuapp.com/kong-admin
       kong_workspaces: kong
