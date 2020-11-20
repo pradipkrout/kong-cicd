@@ -1,9 +1,7 @@
 #!/bin/sh -l
 set -e -o pipefail
-echo Hello World
 
 main (){
-    echo Inside Main
     cmd=$1
     dir=$2
     ops=$3
@@ -15,7 +13,7 @@ main (){
     fi
 
     for file in $(ls ${dir}); do
-        echo "Executing: deck $cmd $ops -s $dir/$file"
+        echo "Executing: deck $cmd --$ops $opsvalue -s $dir/$file"
         deck $cmd --$ops $opsvalue -s $dir/$file
     done
 }
