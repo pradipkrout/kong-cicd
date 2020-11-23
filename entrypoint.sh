@@ -22,7 +22,7 @@ main (){
 
 
 case $1 in
-    "ping") deck $1 --$3 $4;; deck $1 --$3 $5;;
+    "ping") deck $1 --$3 $4; deck $1 --$3 $5;;
     "validate"|"diff"|"sync") main $1 $2 "$3" "$4" "$5";;
     * ) echo "deck $1 is not supported." && exit 1 ;;
 esac
