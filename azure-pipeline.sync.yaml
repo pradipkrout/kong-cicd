@@ -29,6 +29,7 @@ stages:
     parameters:
       kong_url: https://heroku-kong-pjanicked.herokuapp.com/kong-admin
       to_sync: true
+      env: master
       
 - stage: deck_test
   displayName: Deploy Test Environment
@@ -39,13 +40,4 @@ stages:
     parameters:
       kong_url: https://pjanicked-kong-two.herokuapp.com/kong-admin
       to_sync: true
-
-- stage: deck_dev
-  displayName: Deploy Development Environment
-  condition: and(or(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.Reason'], 'BatchedCI'), eq(variables['Build.Reason'], 'Manual')), succeeded())
-  dependsOn: build_and_push_docker_image
-  jobs:
-  - template: /deck_commands.yaml
-    parameters:
-      kong_url: https://pjanicked-kong-two.herokuapp.com/kong-admin
-      to_sync: true
+      env: test

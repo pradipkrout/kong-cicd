@@ -7,9 +7,12 @@ parameters:
   default: kong
 - name: options
   type: string
+- name: env
+  type: string
+  default: test
   
 steps:  
 - task: Docker@2
   displayName: Docker Run deck
 - script: |
-    docker run pjanicked/test-deck ${{ parameters.command }} ${{ parameters.kong_workspaces }} ${{ parameters.options }}
+    docker run pjanicked/test-deck ${{ parameters.command }} ${{ parameters.kong_workspaces }} ${{ parameters.options }} ${{ parameters.env }}
