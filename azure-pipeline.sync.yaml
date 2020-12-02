@@ -33,7 +33,7 @@ stages:
       
 - stage: deck_master
   displayName: Deck Master Environment
-  condition: and(or(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.Reason'], 'BatchedCI'), eq(variables['Build.Reason'], 'Manual')), succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(or(eq(variables['Build.Reason'], 'IndividualCI'), eq(variables['Build.Reason'], 'BatchedCI'), eq(variables['Build.Reason'], 'Manual')), succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   dependsOn: deck_test
   jobs:
   - template: /deck_commands.yaml
