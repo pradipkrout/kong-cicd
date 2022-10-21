@@ -4,6 +4,9 @@ pr:
 resources:
 - repo: self
 
+variables:
+  - group: 'kong-demo'
+
 stages:
 # - stage: build_and_push_docker_image
 #   displayName: Build and push deck docker image
@@ -30,6 +33,7 @@ stages:
       kong_url: https://us.api.konghq.com
       kong_file: dev.yaml
       kong_runtime_group: dev
+      konnect_token: $(konnect-token)
       
 - stage: deck_master
   displayName: Deck Master Environment
@@ -41,3 +45,4 @@ stages:
       kong_url: https://us.api.konghq.com
       kong_file: master.yaml
       kong_runtime_group: default
+      konnect_token: $(konnect-token)
