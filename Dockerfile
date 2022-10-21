@@ -1,4 +1,4 @@
-FROM hbagdi/deck
+FROM kong/deck:v1.15.1
  
 COPY entrypoint.sh /entrypoint.sh
 

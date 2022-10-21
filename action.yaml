@@ -2,17 +2,17 @@ parameters:
 - name: command
   type: string
   default: ping
-- name: kong_workspaces
+- name: kong_runtime_group
   type: string
   default: kong
 - name: options
   type: string
 - name: kong_file
   type: string
-  default: test.yaml
+  default: dev.yaml
   
 steps:  
 - task: Docker@2
   displayName: Docker Run deck
 - script: |
-    docker run pjanicked/test-deck ${{ parameters.command }} ${{ parameters.kong_workspaces }} ${{ parameters.options }} ${{ parameters.kong_file }}
+    docker run kong/deck:v1.15.1 ${{ parameters.command }} ${{ parameters.kong_runtime_group }} ${{ parameters.options }} ${{ parameters.kong_file }} --tls-skip-verify

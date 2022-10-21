@@ -37,4 +37,4 @@ services:
     regex_priority: 0
     strip_path: true
 consumers:
-- username: heroku-admin
+- username: master-admin
