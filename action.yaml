@@ -2,17 +2,34 @@ parameters:
 - name: command
   type: string
   default: ping
-- name: kong_runtime_group
+- name: konnect_runtime_group
   type: string
-  default: kong
+  default: "default"
+- name: konnect_service_name
+  type: string
+  default: ""
 - name: options
   type: string
-- name: kong_file
-  type: string
-  default: dev.yaml
-  
+
 steps:  
 - task: Docker@2
   displayName: Docker Run deck
+# - task: UsePythonVersion@0
+#   condition: ne('${{ parameters.command }}', 'ping')
+#   inputs:
+#     versionSpec: '3.10.6'
 - script: |
-    docker run kong/deck:v1.15.1 ${{ parameters.command }} ${{ parameters.kong_runtime_group }} ${{ parameters.options }} ${{ parameters.kong_file }} --tls-skip-verify
+    #sudo apt-get update -y
+    sudo apt-get install -y python-jinja2
+    sudo pip3 install PyYAML
+  condition: ne('${{ parameters.command }}', 'ping')
+- task: PythonScript@0
+  condition: ne('${{ parameters.command }}', 'ping')
+  inputs:
+    scriptSource: 'filePath'
+    scriptPath: $(System.DefaultWorkingDirectory)/generate_yaml.py
+  env:
+    KONNECT_SERVICE_NAME: ${{ parameters.konnect_service_name }}
+    KONNECT_RUNTIME_GROUP: ${{ parameters.konnect_runtime_group }}
+- script: |
+    docker run -v "$(pwd)/results":/tmp/deck --rm kong/deck:v1.15.1 ${{ parameters.command }} --konnect-runtime-group-name ${{ parameters.konnect_runtime_group }} ${{ parameters.options }} --tls-skip-verify

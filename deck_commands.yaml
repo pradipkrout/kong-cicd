@@ -1,5 +1,5 @@
 parameters:
-- name: kong_url
+- name: konnect_addr
   type: string
   default: https://us.api.konghq.com
 - name: to_sync
@@ -8,57 +8,61 @@ parameters:
 - name: kong_file
   type: string
   default: dev.yaml
-- name: kong_runtime_group
+- name: konnect_runtime_group
   type: string
   default: dev
+- name: konnect_service_name
+  type: string
 - name: konnect_token
   type: string
   default: ""
 
 jobs:
 - job: Deck_Ping
-  displayName: Deck Ping for Kong
+  displayName: Deck Ping for Konnect
   steps:
     - template: /action.yaml
       parameters:
         command: ping
-        options: "--konnect-token ${{ parameters.konnect_token }}"
+        options: "--konnect-token ${{ parameters.konnect_token }} --konnect-addr ${{ parameters.konnect_addr }}"
+        konnect_runtime_group: "${{ parameters.konnect_runtime_group }}"
         
 - job: Deck_Validate
-  displayName: Deck Validate for Kong
+  displayName: Deck Validate for Konnect
   dependsOn: Deck_Ping
   steps:
     - template: /action.yaml
       parameters:
         command: validate
-        options: "--konnect-token ${{ parameters.konnect_token }}"
-        kong_runtime_group: "--konnect-runtime-group-name ${{ parameters.kong_runtime_group }}"
-        kong_file: ${{ parameters.kong_file }}
+        options: "--konnect-addr ${{ parameters.konnect_addr }} --konnect-token ${{ parameters.konnect_token }} -s /tmp/deck/${{ parameters.kong_file }}"
+        konnect_runtime_group: "${{ parameters.konnect_runtime_group }}"
+        konnect_service_name: ${{ parameters.konnect_service_name }}
+    
+- job: Deck_Diff
+  displayName: Deck Diff for Konnect
+  condition: eq(${{ parameters.to_sync }}, false) 
+  dependsOn:
+  - Deck_Ping
+  - Deck_Validate
+  steps:
+    - template: /action.yaml
+      parameters:
+        command: diff
+        options: "--konnect-token ${{ parameters.konnect_token }} --konnect-addr ${{ parameters.konnect_addr }} -s /tmp/deck/${{ parameters.kong_file }}"
+        konnect_runtime_group: "${{ parameters.konnect_runtime_group }}"
+        konnect_service_name: ${{ parameters.konnect_service_name }}
 
-- ${{ if eq(parameters.to_sync, false) }}:       
-  - job: Deck_Diff
-    displayName: Deck Diff for Kong
-    dependsOn:
-    - Deck_Ping
-    - Deck_Validate
-    steps:
-      - template: /action.yaml
-        parameters:
-          command: diff
-          options: "--konnect-token ${{ parameters.konnect_token }}"
-          kong_runtime_group: "--konnect-runtime-group-name ${{ parameters.kong_runtime_group }}"
-          kong_file: ${{ parameters.kong_file }}
-
-- ${{ if eq(parameters.to_sync, true) }}:      
-  - job: Deck_Sync
-    displayName: Deck Sync for Kong
-    dependsOn:
-    - Deck_Ping
-    - Deck_Validate
-    steps:
-      - template: /action.yaml
-        parameters:
-          command: sync
-          options: "--konnect-token ${{ parameters.konnect_token }}"
-          kong_runtime_group: "--konnect-runtime-group-name ${{ parameters.kong_runtime_group }}"
-          kong_file: ${{ parameters.kong_file }}
+   
+- job: Deck_Sync
+  displayName: Deck Sync for Konnect
+  condition: eq(${{ parameters.to_sync }}, true) 
+  dependsOn:
+  - Deck_Ping
+  - Deck_Validate
+  steps:
+    - template: /action.yaml
+      parameters:
+        command: sync
+        options: "--konnect-addr ${{ parameters.konnect_addr }} --konnect-token ${{ parameters.konnect_token }} -s /tmp/deck/${{ parameters.kong_file }}"
+        konnect_runtime_group: "${{ parameters.konnect_runtime_group }}"
+        konnect_service_name: ${{ parameters.konnect_service_name }}
