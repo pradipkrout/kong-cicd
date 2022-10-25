@@ -1,5 +1,5 @@
 # Introduction 
-Repository that contains resources to demonstrate Konnect CICD (Now it only have Azure DevOps pipeline, will be adding more CICD pipelines). Contains a pipeline `azure-pipelines.yaml` which will perform `decK ping`, `decK validate`, `decK diff` and `decK sync`. 
+Repository that contains resources to demonstrate Konnect/Kong CICD (Right now we only have Azure DevOps pipeline, will be adding more soon). Contains a pipeline `azure-pipelines.yaml` which will perform `decK ping`, `decK validate`, `decK diff` and `decK sync`. 
 
 # Repository Explanation
 
