@@ -21,7 +21,7 @@ jobs:
 - job: Deck_Ping
   displayName: Deck Ping for Konnect
   steps:
-    - template: /action.yaml
+    - template: /azure/action.yaml
       parameters:
         command: ping
         options: "--konnect-token ${{ parameters.konnect_token }} --konnect-addr ${{ parameters.konnect_addr }}"
@@ -31,7 +31,7 @@ jobs:
   displayName: Deck Validate for Konnect
   dependsOn: Deck_Ping
   steps:
-    - template: /action.yaml
+    - template: /azure/action.yaml
       parameters:
         command: validate
         options: "--konnect-addr ${{ parameters.konnect_addr }} --konnect-token ${{ parameters.konnect_token }} -s /tmp/deck/${{ parameters.kong_file }}"
@@ -45,7 +45,7 @@ jobs:
   - Deck_Ping
   - Deck_Validate
   steps:
-    - template: /action.yaml
+    - template: /azure/action.yaml
       parameters:
         command: diff
         options: "--konnect-token ${{ parameters.konnect_token }} --konnect-addr ${{ parameters.konnect_addr }} -s /tmp/deck/${{ parameters.kong_file }}"
@@ -60,7 +60,7 @@ jobs:
   - Deck_Ping
   - Deck_Validate
   steps:
-    - template: /action.yaml
+    - template: /azure/action.yaml
       parameters:
         command: sync
         options: "--konnect-addr ${{ parameters.konnect_addr }} --konnect-token ${{ parameters.konnect_token }} -s /tmp/deck/${{ parameters.kong_file }}"

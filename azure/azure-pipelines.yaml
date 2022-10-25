@@ -29,7 +29,7 @@ stages:
   displayName: DEV Environment
   condition: eq('${{ parameters.konnect_runtime_group }}', 'dev') 
   jobs:
-  - template: /deck_commands.yaml
+  - template: /azure/deck_commands.yaml
     parameters:
       kong_file: ${{ parameters.service_name }}_${{ parameters.konnect_runtime_group }}.yaml
       konnect_service_name: ${{ parameters.service_name }}
@@ -43,7 +43,7 @@ stages:
   condition: eq('${{ parameters.konnect_runtime_group }}', 'qa') 
   dependsOn: dev
   jobs:
-  - template: /deck_commands.yaml
+  - template: /azure/deck_commands.yaml
     parameters:
       kong_file: ${{ parameters.service_name }}_${{ parameters.konnect_runtime_group }}.yaml
       konnect_service_name: ${{ parameters.service_name }}
@@ -57,7 +57,7 @@ stages:
   condition: eq('${{ parameters.konnect_runtime_group }}', 'stg') 
   dependsOn: qa
   jobs:
-  - template: /deck_commands.yaml
+  - template: /azure/deck_commands.yaml
     parameters:
       kong_file: ${{ parameters.service_name }}_${{ parameters.konnect_runtime_group }}.yaml
       konnect_service_name: ${{ parameters.service_name }}
