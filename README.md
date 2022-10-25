@@ -1,22 +1,17 @@
 # Introduction 
-Repository that contains resources to demonstrate Konnect CICD using AzureDevOps. Contains a pipeline `azure-pipelines.yaml` which will perform `decK ping`, `decK validate`, `decK diff` and `decK sync`. 
+Repository that contains resources to demonstrate Konnect CICD (Now it only have Azure DevOps pipeline, will be adding more CICD pipelines). Contains a pipeline `azure-pipelines.yaml` which will perform `decK ping`, `decK validate`, `decK diff` and `decK sync`. 
 
-## Pre-requisites
-1. Azure DevOps Environment access
-2. Access to this repository
-3. Create variable group in Pipelines Library section of Azure DevOps. **Note**: In this repo, `kong-demo` variable is created and used, make sure to update the `azure-pipelines.yaml` with the group name created here. 
-    - Create two variables
-        - konnect-token (Value for this will be personal access token)
-        - konnect-addr (Address of the Konnect endpoint)
+# Repository Explanation
+`kong` -> Contains environment specific folders with different service specific values file specific to that environment.
+`results` -> Added a dummy file, but this is the folder where the processed yaml files get created by `generate_yaml.py`
+`templates` -> Contains the jinja2 template files specific to services.
+`azure` -> Azure DevOps pipeline resources, README.md
+`generate_yaml.py` -> Python script to process the jinga2 templates.
+`README.md` -> Repository specific README file.
 
 # Create and Execute Pipeline
-- Create a new pipeline using the `azure-pipelines.yaml` file located in the repository.
-- Run the pipeline created by defining values for following parameters.
-    - Choose the branch
-    - Select Konnect runtime group
-    - Give name of the Konnect/Kong Service
-    - Check `Sync configurations to Konnect` if configurations have to be deployed to Konnect. By default this is set to false, which means pipeline doesn't sync configurations to Konnect, instead it will just show perform `decK ping, validate and diff`
-    - Click on Run to trigger pipeline execution against the defined service and environment.
+ - Refer `azure` folder for details.
+ - In future will add references for other CICD tools.
 
 # To process jinga2 template locally
 - Following tools have to be installed.
