@@ -12,19 +12,12 @@ parameters:
   type: string
 
 steps:  
-- task: Docker@2
-  displayName: Docker Run deck
-# - task: UsePythonVersion@0
-#   condition: ne('${{ parameters.command }}', 'ping')
-#   inputs:
-#     versionSpec: '3.10.6'
 - script: |
-    #sudo apt-get update -y
     sudo apt-get install -y python-jinja2
     sudo pip3 install PyYAML
   condition: ne('${{ parameters.command }}', 'ping')
 - task: PythonScript@0
-  condition: ne('${{ parameters.command }}', 'ping')
+  condition: eq('${{ parameters.command }}', 'validate')
   inputs:
     scriptSource: 'filePath'
     scriptPath: $(System.DefaultWorkingDirectory)/generate_yaml.py
