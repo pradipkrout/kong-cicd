@@ -44,5 +44,5 @@ services:
     strip_path: true
   tags:
   - myservice_dev
-  - _KonnectService:myservice
+  - _KonnectService:myservice_dev
   write_timeout: 60000

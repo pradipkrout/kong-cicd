@@ -21,5 +21,8 @@ Repository that contains resources to demonstrate Konnect/Kong CICD (Right now w
     1. jinga2
     2. PyYaml
     3. python3
+- Set two environment variables
+    - KONNECT_RUNTIME_GROUP
+    - KONNECT_SERVICE_NAME
 - Excute following `generate_yaml.py` file in command line. Example command: `python3 generate_yaml.py`
 - Once executed, the generated yaml file can be found in `results` folder.
