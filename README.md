@@ -16,6 +16,15 @@ Repository that contains resources to demonstrate Konnect/Kong CICD (Right now w
  - Refer `azure` folder for details.
  - In future will add references for other CICD tools.
 
+# On-board a new Service
+ - Create a `template` jinja2 file in `templates` folders
+   - Easy way to create a template file is
+     - Manually create service in Konnect Cloud
+     - Execute `deck dump` command with appropriate tags to only get the content of your service.
+     - Update the file with `jinga2` syntax for the values those are not static and should be overridden by values from `kong/<environment folder>/<servicename_environment>.yaml`
+ - Create value(s) file in `kong` folder
+ - Commit changes to repository
+
 # To process jinga2 template locally
 - Following tools have to be installed.
     1. jinga2
