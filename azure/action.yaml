@@ -17,7 +17,7 @@ steps:
     sudo pip3 install PyYAML
   condition: ne('${{ parameters.command }}', 'ping')
 - task: PythonScript@0
-  condition: eq('${{ parameters.command }}', 'validate')
+  condition: and(succeeded(), ne('${{ parameters.command }}', 'ping'))
   inputs:
     scriptSource: 'filePath'
     scriptPath: $(System.DefaultWorkingDirectory)/generate_yaml.py
@@ -25,4 +25,5 @@ steps:
     KONNECT_SERVICE_NAME: ${{ parameters.konnect_service_name }}
     KONNECT_RUNTIME_GROUP: ${{ parameters.konnect_runtime_group }}
 - script: |
-    docker run -v "$(pwd)/results":/tmp/deck --rm kong/deck:v1.15.1 ${{ parameters.command }} --konnect-runtime-group-name ${{ parameters.konnect_runtime_group }} ${{ parameters.options }} --tls-skip-verify
+    docker run -v "$(System.DefaultWorkingDirectory)/results":/tmp/deck --rm kong/deck:v1.15.1 ${{ parameters.command }} --konnect-runtime-group-name ${{ parameters.konnect_runtime_group }} ${{ parameters.options }} --tls-skip-verify
+  condition: succeeded()
