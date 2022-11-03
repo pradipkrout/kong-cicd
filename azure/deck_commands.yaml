@@ -7,7 +7,7 @@ parameters:
   default: false
 - name: kong_file
   type: string
-  default: dev.yaml
+  default: ""
 - name: konnect_runtime_group
   type: string
   default: dev
@@ -20,6 +20,7 @@ parameters:
 jobs:
 - job: Deck_Ping
   displayName: Deck Ping for Konnect
+  condition: succeeded()
   steps:
     - template: /azure/action.yaml
       parameters:
@@ -29,7 +30,9 @@ jobs:
         
 - job: Deck_Validate
   displayName: Deck Validate for Konnect
-  dependsOn: Deck_Ping
+  condition: succeeded()
+  dependsOn: 
+    - Deck_Ping
   steps:
     - template: /azure/action.yaml
       parameters:
@@ -40,7 +43,7 @@ jobs:
     
 - job: Deck_Diff
   displayName: Deck Diff for Konnect
-  condition: eq(${{ parameters.to_sync }}, false) 
+  condition: and(succeeded(), eq(${{ parameters.to_sync }}, false))
   dependsOn:
   - Deck_Ping
   - Deck_Validate
@@ -52,10 +55,9 @@ jobs:
         konnect_runtime_group: "${{ parameters.konnect_runtime_group }}"
         konnect_service_name: ${{ parameters.konnect_service_name }}
 
-   
 - job: Deck_Sync
   displayName: Deck Sync for Konnect
-  condition: eq(${{ parameters.to_sync }}, true) 
+  condition: and(succeeded(), eq(${{ parameters.to_sync }}, true)) 
   dependsOn:
   - Deck_Ping
   - Deck_Validate

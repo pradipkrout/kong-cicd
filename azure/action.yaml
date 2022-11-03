@@ -15,7 +15,7 @@ steps:
 - script: |
     sudo apt-get install -y python-jinja2
     sudo pip3 install PyYAML
-  condition: ne('${{ parameters.command }}', 'ping')
+  condition: and(succeeded(), ne('${{ parameters.command }}', 'ping'))
 - task: PythonScript@0
   condition: and(succeeded(), ne('${{ parameters.command }}', 'ping'))
   inputs:
@@ -27,3 +27,14 @@ steps:
 - script: |
     docker run -v "$(System.DefaultWorkingDirectory)/results":/tmp/deck --rm kong/deck:v1.15.1 ${{ parameters.command }} --konnect-runtime-group-name ${{ parameters.konnect_runtime_group }} ${{ parameters.options }} --tls-skip-verify
   condition: succeeded()
+- task: CopyFiles@2
+  condition: and(succeeded(), eq('${{ parameters.command }}', 'validate'))
+  inputs:
+    sourceFolder: '$(System.DefaultWorkingDirectory)/results'
+    contents: '*'
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
+- task: PublishBuildArtifacts@1
+  condition: and(succeeded(), eq('${{ parameters.command }}', 'validate'))
+  inputs:
+    pathToPublish: $(Build.ArtifactStagingDirectory)
+    artifactName: MyBuildOutputs

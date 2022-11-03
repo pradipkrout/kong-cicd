@@ -8,19 +8,22 @@ konnect_runtime_group = os.environ.get('KONNECT_RUNTIME_GROUP')
 if not os.path.exists('results'):
     os.makedirs('results')
 
-file_name = './kong/{0}/{1}_{2}.yaml'.format(konnect_runtime_group,konnect_service_name, konnect_runtime_group)
-results_file_name = os.getcwd() + "/results/{0}_{1}.yaml".format(konnect_service_name, konnect_runtime_group)
+file_name = os.getcwd() + '/kong/{0}/{1}_{2}.yaml'.format(konnect_runtime_group,konnect_service_name, konnect_runtime_group)
+results_file_name = os.getcwd() + '/results/{0}_{1}.yaml'.format(konnect_service_name, konnect_runtime_group)
 print("Results file is :" + results_file_name)
 
-with open(file_name, 'r') as file:
-    values = yaml.safe_load(file)
-    # Load templates file from templtes folder
-    env = Environment(loader = FileSystemLoader('./templates'),   trim_blocks=True, lstrip_blocks=True)
-
-    template = env.get_template('{0}.yaml.j2'.format(konnect_service_name))
-    file=open(results_file_name, "w")
-    file.write(template.render(values))
-    file.close()
+try:
+    with open(file_name, 'r') as file:
+        values = yaml.safe_load(file)
+        # Load templates file from templates folder
+        env = Environment(loader = FileSystemLoader('./templates'),   trim_blocks=True, lstrip_blocks=True)
+        
+        template = env.get_template('{0}.yaml.j2'.format(konnect_service_name))
+        file=open(results_file_name, "w")
+        file.write(template.render(values))
+        file.close()
+except IOError as e:
+    print('Error loading Template file or results - File not found!!!' + e)
 
 print("Yaml file is generated successfully")
 

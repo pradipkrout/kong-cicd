@@ -1,5 +1,4 @@
-pr:
-- master
+trigger: none
 
 resources:
 - repo: self
@@ -16,6 +15,9 @@ parameters:
 - name: service_name
   displayName: Name of the Service in Konnect
   type: string
+  default: mockbin
+  values:
+  - mockbin
 - name: sync_configs
   displayName: Sync configurations to Konnect
   type: boolean

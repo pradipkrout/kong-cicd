@@ -6,7 +6,7 @@ Repository that contains resources to demonstrate Konnect/Kong CICD (Right now w
 | File/Folder | Description |
 | --- | ----------- |
 | `kong` | Contains environment specific folders with different service specific values file specific to that environment. |
-| `results` | Added a dummy file, but this is the folder where the processed yaml files get created by `generate_yaml.py` |
+| `results` | This folder is not present in repository, but this is the folder where the processed yaml files get created by `generate_yaml.py` during runtime |
 | `templates` | Contains the jinja2 template files specific to services. |
 | `azure` | Azure DevOps pipeline resources, README.md |
 | `generate_yaml.py` | Python script to process the jinga2 templates. |
