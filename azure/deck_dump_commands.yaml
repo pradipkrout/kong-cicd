@@ -1,0 +1,48 @@
+parameters:
+- name: konnect_addr
+  type: string
+  default: https://us.api.konghq.com
+- name: kong_file
+  type: string
+  default: ""
+- name: konnect_runtime_group
+  type: string
+  default: dev
+- name: konnect_token
+  type: string
+  default: ""
+- name: select_tags
+  displayName: List Konnect select_tags
+  type: string
+
+jobs:
+- job: Deck_Ping
+  displayName: Deck Ping for Konnect
+  condition: succeeded()
+  steps:
+    - template: /azure/dump_action.yaml
+      parameters:
+        command: ping
+        options: "--konnect-token ${{ parameters.konnect_token }} --konnect-addr ${{ parameters.konnect_addr }}"
+        konnect_runtime_group: "${{ parameters.konnect_runtime_group }}"
+
+- job: Deck_Dump
+  displayName: Deck Dump for Konnect
+  condition: succeeded()
+  steps:
+    - script: |
+        select_tags_list=""
+        tags_list=(`echo ${{ parameters.select_tags }} | tr ',' ' '`)
+        
+        for tag in $tags_list
+        do
+          select_tags_list+="--select-tag $tag "
+        done
+        echo "##vso[task.setvariable variable=select_tags_list;]$select_tags_list"
+      condition: succeeded()
+    - template: /azure/dump_action.yaml
+      parameters:
+        command: dump
+        options: "--konnect-token ${{ parameters.konnect_token }} --konnect-addr ${{ parameters.konnect_addr }}"
+        konnect_runtime_group: "${{ parameters.konnect_runtime_group }}"
+        select_tags: $(select_tags_list)

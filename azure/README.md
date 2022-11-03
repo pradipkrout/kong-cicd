@@ -1,15 +1,17 @@
 # Introduction 
-Folder that contains resources to demonstrate Konnect CICD using Azure DevOps. Contains a pipeline `azure-pipelines.yaml` which will perform `decK ping`, `decK validate`, `decK diff` and `decK sync`. 
+Folder that contains resources to demonstrate Konnect CICD using Azure DevOps. Contains two pipelines
+    -  `azure-pipelines.yaml` which will perform `decK ping`, `decK validate`, `decK diff` and `decK sync`
+    - `deck-dump-pipeline.yaml` which will perform `decK ping` and `decK dump`
 
 # Pre-requisites
 1. Azure DevOps Environment access
 2. Access to this repository
-3. Create variable group in Pipelines Library section of Azure DevOps. **Note**: In this repo, `kong-demo` variable is created and used, make sure to update the `azure-pipelines.yaml` with the group name created here. 
+3. Create variable group in Pipelines Library section of Azure DevOps. **Note**: In this repo, `kong-demo` variable is created and used, make sure to update the `azure-pipelines.yaml` and `deck-dump-pipeline.yaml` with the group name created here. 
     - Create two variables
         - konnect-token (Value for this will be personal access token)
         - konnect-addr (Address of the Konnect endpoint)
 
-# Create and Execute Pipeline
+# Create and Execute Pipeline azure-pipelines.yaml
 - Create a new pipeline using the `azure-pipelines.yaml` file located in the repository.
 - Run the pipeline created by defining values for following parameters.
     - Choose the branch
