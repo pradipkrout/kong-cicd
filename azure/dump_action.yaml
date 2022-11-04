@@ -22,6 +22,8 @@ steps:
     condition: succeeded()
 - ${{ if eq(parameters.command, 'dump') }}:
   - script: |
+        mkdir /tmp/deck/
+        chmod 777 /tmp/deck/
         docker run --rm kong/deck:v1.15.1 ${{ parameters.command }} --konnect-runtime-group-name ${{ parameters.konnect_runtime_group }} ${{ parameters.options }} ${{ parameters.select_tags }} -o /tmp/deck/konnect-$(Build.BuildId).yaml --tls-skip-verify
     condition: succeeded()
 - task: CopyFiles@2
