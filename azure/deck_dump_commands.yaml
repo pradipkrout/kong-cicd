@@ -35,7 +35,7 @@ jobs:
         select_tags_list=""
         tags_list=(`echo ${{ parameters.select_tags }} | tr ',' ' '`)
 
-        for tag in $tags_list
+        for tag in ${tags_list[@]}
         do
           select_tags_list+="--select-tag $tag "
         done
