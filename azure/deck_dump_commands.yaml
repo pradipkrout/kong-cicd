@@ -29,11 +29,12 @@ jobs:
 - job: Deck_Dump
   displayName: Deck Dump for Konnect
   condition: succeeded()
+  dependsOn: Deck_Ping
   steps:
     - script: |
         select_tags_list=""
         tags_list=(`echo ${{ parameters.select_tags }} | tr ',' ' '`)
-        
+
         for tag in $tags_list
         do
           select_tags_list+="--select-tag $tag "
