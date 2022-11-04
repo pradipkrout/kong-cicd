@@ -16,18 +16,18 @@ parameters:
   default: ""
 
 steps:
-- ${{ if eq(parameters.command, 'dump') }}:
-  - script: |
-        docker run --rm kong/deck:v1.15.1 ${{ parameters.command }} --konnect-runtime-group-name ${{ parameters.konnect_runtime_group }} ${{ parameters.options }} ${{ parameters.select_tags }} -o $(System.DefaultWorkingDirectory)/konnect-$(Build.BuildId).yaml --tls-skip-verify
-    condition: succeeded()
 - ${{ if eq(parameters.command, 'ping') }}:
   - script: |
         docker run -v "$(System.DefaultWorkingDirectory)/results":/tmp/deck --rm kong/deck:v1.15.1 ${{ parameters.command }} --konnect-runtime-group-name ${{ parameters.konnect_runtime_group }} ${{ parameters.options }} --tls-skip-verify
     condition: succeeded()
+- ${{ if eq(parameters.command, 'dump') }}:
+  - script: |
+        docker run --rm kong/deck:v1.15.1 ${{ parameters.command }} --konnect-runtime-group-name ${{ parameters.konnect_runtime_group }} ${{ parameters.options }} ${{ parameters.select_tags }} -o /tmp/deck/konnect-$(Build.BuildId).yaml --tls-skip-verify
+    condition: succeeded()
 - task: CopyFiles@2
   condition: and(succeeded(), eq('${{ parameters.command }}', 'dump'))
   inputs:
-    sourceFolder: '$(System.DefaultWorkingDirectory)'
+    sourceFolder: '/tmp/deck'
     contents: 'konnect-$(Build.BuildId).yaml'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
 - task: PublishBuildArtifacts@1
