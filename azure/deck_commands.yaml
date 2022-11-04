@@ -22,6 +22,7 @@ jobs:
   displayName: Deck Ping for Konnect
   condition: succeeded()
   steps:
+    - template: /azure/prerequisites.yaml
     - template: /azure/action.yaml
       parameters:
         command: ping
@@ -34,12 +35,36 @@ jobs:
   dependsOn: 
     - Deck_Ping
   steps:
+    - template: /azure/prerequisites.yaml
+    - task: PythonScript@0
+      condition: succeeded()
+      inputs:
+        scriptSource: 'filePath'
+        scriptPath: $(System.DefaultWorkingDirectory)/generate_yaml.py
+      env:
+        KONNECT_SERVICE_NAME: ${{ parameters.konnect_service_name }}
+        KONNECT_RUNTIME_GROUP: ${{ parameters.konnect_runtime_group }}
     - template: /azure/action.yaml
       parameters:
         command: validate
-        options: "--konnect-addr ${{ parameters.konnect_addr }} --konnect-token ${{ parameters.konnect_token }} -s /tmp/deck/${{ parameters.kong_file }}"
+        options: "--konnect-addr ${{ parameters.konnect_addr }} --konnect-token ${{ parameters.konnect_token }} -s $(System.DefaultWorkingDirectory)/results/${{ parameters.kong_file }}"
         konnect_runtime_group: "${{ parameters.konnect_runtime_group }}"
-        konnect_service_name: ${{ parameters.konnect_service_name }}
+    - task: CopyFiles@2
+      condition: succeeded()
+      inputs:
+        sourceFolder: '$(System.DefaultWorkingDirectory)/results'
+        contents: '*'
+        targetFolder: '$(Build.ArtifactStagingDirectory)'
+    # - task: PublishBuildArtifacts@1
+    #   condition: succeeded()
+    #   inputs:
+    #     pathToPublish: $(Build.ArtifactStagingDirectory)
+    #     artifactName: MyBuildOutputs
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: $(System.DefaultWorkingDirectory)/results/${{ parameters.kong_file }}
+        artifactName: ${{ parameters.konnect_service_name }}
+
     
 - job: Deck_Diff
   displayName: Deck Diff for Konnect
@@ -48,12 +73,16 @@ jobs:
   - Deck_Ping
   - Deck_Validate
   steps:
+    - template: /azure/prerequisites.yaml
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifact: ${{ parameters.konnect_service_name }}
+        path: $(System.DefaultWorkingDirectory)/results/${{ parameters.kong_file }}
     - template: /azure/action.yaml
       parameters:
         command: diff
-        options: "--konnect-token ${{ parameters.konnect_token }} --konnect-addr ${{ parameters.konnect_addr }} -s /tmp/deck/${{ parameters.kong_file }}"
+        options: "--konnect-token ${{ parameters.konnect_token }} --konnect-addr ${{ parameters.konnect_addr }} -s $(System.DefaultWorkingDirectory)/results/${{ parameters.kong_file }}"
         konnect_runtime_group: "${{ parameters.konnect_runtime_group }}"
-        konnect_service_name: ${{ parameters.konnect_service_name }}
 
 - job: Deck_Sync
   displayName: Deck Sync for Konnect
@@ -62,9 +91,13 @@ jobs:
   - Deck_Ping
   - Deck_Validate
   steps:
+    - template: /azure/prerequisites.yaml
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifact: ${{ parameters.konnect_service_name }}
+        path: $(System.DefaultWorkingDirectory)/results/${{ parameters.kong_file }}
     - template: /azure/action.yaml
       parameters:
         command: sync
-        options: "--konnect-addr ${{ parameters.konnect_addr }} --konnect-token ${{ parameters.konnect_token }} -s /tmp/deck/${{ parameters.kong_file }}"
+        options: "--konnect-addr ${{ parameters.konnect_addr }} --konnect-token ${{ parameters.konnect_token }} -s $(System.DefaultWorkingDirectory)/results/${{ parameters.kong_file }}"
         konnect_runtime_group: "${{ parameters.konnect_runtime_group }}"
-        konnect_service_name: ${{ parameters.konnect_service_name }}

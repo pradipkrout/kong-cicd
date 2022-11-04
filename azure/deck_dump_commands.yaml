@@ -20,17 +20,16 @@ jobs:
   displayName: Deck Ping for Konnect
   condition: succeeded()
   steps:
-    - template: /azure/dump_action.yaml
-      parameters:
-        command: ping
-        options: "--konnect-token ${{ parameters.konnect_token }} --konnect-addr ${{ parameters.konnect_addr }}"
-        konnect_runtime_group: "${{ parameters.konnect_runtime_group }}"
+    - template: /azure/prerequisites.yaml
+    - script: |
+        deck ping --konnect-runtime-group-name ${{ parameters.konnect_runtime_group }} --konnect-token ${{ parameters.konnect_token }} --konnect-addr ${{ parameters.konnect_addr }} --tls-skip-verify
 
 - job: Deck_Dump
   displayName: Deck Dump for Konnect
   condition: succeeded()
   dependsOn: Deck_Ping
   steps:
+    - template: /azure/prerequisites.yaml
     - script: |
         select_tags_list=""
         tags_list=(`echo ${{ parameters.select_tags }} | tr ',' ' '`)
@@ -41,9 +40,18 @@ jobs:
         done
         echo "##vso[task.setvariable variable=select_tags_list;]$select_tags_list"
       condition: succeeded()
-    - template: /azure/dump_action.yaml
-      parameters:
-        command: dump
-        options: "--konnect-token ${{ parameters.konnect_token }} --konnect-addr ${{ parameters.konnect_addr }}"
-        konnect_runtime_group: "${{ parameters.konnect_runtime_group }}"
-        select_tags: $(select_tags_list)
+    - script: |
+        mkdir 
+        deck dump --konnect-runtime-group-name ${{ parameters.konnect_runtime_group }} --konnect-token ${{ parameters.konnect_token }} --konnect-addr ${{ parameters.konnect_addr }} $(select_tags_list) --yes --format yaml --output-file konnect-$(Build.BuildId).yaml --tls-skip-verify
+      condition: succeeded()
+    - task: CopyFiles@2
+      condition: succeeded()
+      inputs:
+        sourceFolder: '$(System.DefaultWorkingDirectory)'
+        contents: 'konnect-$(Build.BuildId).yaml'
+        targetFolder: '$(Build.ArtifactStagingDirectory)'
+    - task: PublishBuildArtifacts@1
+      condition: succeeded()
+      inputs:
+        pathToPublish: $(Build.ArtifactStagingDirectory)
+        artifactName: MyBuildOutputs
