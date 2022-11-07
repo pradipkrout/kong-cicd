@@ -55,11 +55,6 @@ jobs:
         sourceFolder: '$(System.DefaultWorkingDirectory)/results'
         contents: '*'
         targetFolder: '$(Build.ArtifactStagingDirectory)'
-    # - task: PublishBuildArtifacts@1
-    #   condition: succeeded()
-    #   inputs:
-    #     pathToPublish: $(Build.ArtifactStagingDirectory)
-    #     artifactName: MyBuildOutputs
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: $(System.DefaultWorkingDirectory)/results/${{ parameters.kong_file }}

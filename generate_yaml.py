@@ -1,4 +1,5 @@
 import os
+import sys
 import yaml
 from jinja2 import Environment, FileSystemLoader
 
@@ -22,12 +23,15 @@ try:
         file=open(results_file_name, "w")
         file.write(template.render(values))
         file.close()
-except IOError as e:
-    print('Error loading Template file or results - File not found!!!' + e)
+except FileNotFoundError as e:
+    sys.exit('Error loading Template file or results - ensure service specific values and template file exists in repo and also verify if correct service name is passed : {}'.format(e))
 
 print("Yaml file is generated successfully")
 
-with open(results_file_name) as f:
-    data = yaml.load(f, Loader=yaml.FullLoader)
-    print(data)
-    f.close()
+try:
+    with open(results_file_name) as f:
+        data = yaml.load(f, Loader=yaml.FullLoader)
+        print(data)
+        f.close()
+except Exception as e:
+    sys.exit('Error processing template file: {}'.format(e))
