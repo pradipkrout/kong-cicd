@@ -44,12 +44,6 @@ jobs:
         mkdir 
         deck dump --konnect-runtime-group-name ${{ parameters.konnect_runtime_group }} --konnect-token ${{ parameters.konnect_token }} --konnect-addr ${{ parameters.konnect_addr }} $(select_tags_list) --yes --format yaml --output-file konnect-$(Build.BuildId).yaml --tls-skip-verify
       condition: succeeded()
-    # - task: CopyFiles@2
-    #   condition: succeeded()
-    #   inputs:
-    #     sourceFolder: '$(System.DefaultWorkingDirectory)'
-    #     contents: 'konnect-$(Build.BuildId).yaml'
-    #     targetFolder: '$(Build.ArtifactStagingDirectory)'
     - task: PublishPipelineArtifact@1
       condition: succeeded()
       inputs:

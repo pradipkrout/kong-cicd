@@ -49,12 +49,6 @@ jobs:
         command: validate
         options: "--konnect-addr ${{ parameters.konnect_addr }} --konnect-token ${{ parameters.konnect_token }} -s $(System.DefaultWorkingDirectory)/results/${{ parameters.kong_file }}"
         konnect_runtime_group: "${{ parameters.konnect_runtime_group }}"
-    - task: CopyFiles@2
-      condition: succeeded()
-      inputs:
-        sourceFolder: '$(System.DefaultWorkingDirectory)/results'
-        contents: '*'
-        targetFolder: '$(Build.ArtifactStagingDirectory)'
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: $(System.DefaultWorkingDirectory)/results/${{ parameters.kong_file }}
