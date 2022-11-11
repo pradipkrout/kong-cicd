@@ -2,6 +2,7 @@ import os
 import sys
 import yaml
 from jinja2 import Environment, FileSystemLoader
+from jinja2.exceptions import TemplateNotFound
 
 konnect_service_name = os.environ.get('KONNECT_SERVICE_NAME')
 konnect_runtime_group = os.environ.get('KONNECT_RUNTIME_GROUP')
@@ -23,8 +24,10 @@ try:
         file=open(results_file_name, "w")
         file.write(template.render(values))
         file.close()
+except TemplateNotFound as e:
+    sys.exit('Template might not be found, ensure your template file exists in templates folder of repo with name being just the service name and does not have environment : {}'.format(e))
 except FileNotFoundError as e:
-    sys.exit('Error loading Template file or results - ensure service specific values and template file exists in repo and also verify if correct service name is passed : {}'.format(e))
+    sys.exit('Error loading results file - ensure service specific values file with name being servicename underscore environment name exists in repo and also verify if correct service name is passed from pipeline : {}'.format(e))
 
 print("Yaml file is generated successfully")
 
