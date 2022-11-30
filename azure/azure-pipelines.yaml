@@ -24,7 +24,7 @@ parameters:
   default: false
 
 variables:
-  - group: 'kong-demo'
+  - group: 'kong-nonprod'
 
 stages:
 - stage: dev
@@ -43,7 +43,6 @@ stages:
 - stage: qa
   displayName: QA Environment
   condition: eq('${{ parameters.konnect_runtime_group }}', 'qa') 
-  dependsOn: dev
   jobs:
   - template: /azure/deck_commands.yaml
     parameters:
@@ -57,7 +56,6 @@ stages:
 - stage: stg
   displayName: STG Environment
   condition: eq('${{ parameters.konnect_runtime_group }}', 'stg') 
-  dependsOn: qa
   jobs:
   - template: /azure/deck_commands.yaml
     parameters:
