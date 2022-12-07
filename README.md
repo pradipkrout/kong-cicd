@@ -22,13 +22,13 @@ Repository that contains resources to demonstrate Konnect/Kong CICD (Right now w
    - Easy way to create a template file is
      - Manually create service in Konnect Cloud
      - Execute `deck dump` command with appropriate tags to only get the content of your service.
-     - Update the file with `jinga2` syntax for the values those are not static and should be overridden by values from `kong/<environment folder>/<servicename_environment>.yaml`
+     - Update the file with `jinja2` syntax for the values those are not static and should be overridden by values from `kong/<environment folder>/<servicename_environment>.yaml`
  - Create value(s) file in `kong` folder
  - Commit changes to repository
 
 # To process jinga2 template locally
 - Following tools have to be installed.
-    1. jinga2
+    1. jinja2
     2. PyYaml
     3. python3
 - Set two environment variables
